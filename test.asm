@@ -1,4 +1,5 @@
 %include "itoa.asm"
+%include "print.asm"
 
 section .text
 global _start
@@ -7,10 +8,7 @@ _start:
     call itoa           ; call itoa
 
     mov rsi, rax        ; put result of itoa in rsi for write operation
-    mov rax, 1          ; sys_write
-    mov rdi, 1          ; stdout
-    mov rdx, 20         ; max length of string
-    syscall
+    call println
 exit:
     mov rax, 60         ; sys_exit 
     mov rdi, 0          ; code 0 (successful)
