@@ -1,5 +1,15 @@
-global print
 section .text
+
+count:
+    cmp byte [rbp], 0   ; reached null byte?
+    jz count.end        ; yes
+    inc rdx             ; inc byte count
+    inc rbp             ; inc pointer
+    jmp count           ; loop until null
+count.end:
+    ret
+
+global print
 print:
     push rdx
     push rcx
@@ -8,14 +18,9 @@ print:
 
 	xor rdx, rdx        ; set rdx to 0
 	mov rbp, rsi        ; set branch pointer to address in rsi (arg0)
-count:
-    cmp byte [rbp], 0   ; reached null byte?
-    jz count.end        ; yes
-    inc rdx             ; inc byte count
-    inc rbp             ; inc pointer
-    jmp count           ; loop until null
-count.end:
-    
+
+    call count
+
     mov rax, 1          ; call for sys_write
     mov rdi, 1          ; stdout
     syscall
